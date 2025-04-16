@@ -21,7 +21,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
 <main>
-    <button data-interaccion-accion="test-page">
+    <script>
+        function sendTag() {
+            console.log("sendTag");
+            window.dataLayer.push({
+                "event": "my-click",
+                "idUsuario": "1",
+                "fecha": (new Date).toISOString(),
+            });
+        }
+    </script>
+
+    <button data-interaccion-accion="test-page" onclick="() => sendTag()">
         TEST
     </button>
 </main>
