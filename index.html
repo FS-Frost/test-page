@@ -19,21 +19,49 @@
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-
 <main>
     <script>
-        function sendTag() {
-            console.log("sendTag");
+        function _inicializarContexto() {
+            window._contexto = {};
+        }
+
+        function _actualizarContexto(interaccion = {}) {
+            if (typeof interaccion !== "object") {
+                console.error("interacción no es un objeto", { interaccion });
+                return;
+            }
+
+            if (typeof _contexto !== "object") {
+                console.warn("contexto inválido, reinicializando");
+                _inicializarContexto();
+            }
+
+            for (const key in interaccion) {
+                window._contexto[key] = interaccion[key];
+            }
+
+            window._contexto.horaLocal = (new Date).toISOString();
+
             window.dataLayer.push({
-                "event": "my-click",
-                "idUsuario": "1",
-                "fecha": (new Date).toISOString(),
+                "event": "contexto-actualizado",
             });
         }
+
+        (function() {
+            _inicializarContexto();
+
+            window._contexto = {
+                version: 4,
+                idUsuario: 10,
+                asignatura: "Lenguaje y Comunicación",
+                nivel: "4° básico",
+                modulo: "Aprender a leer",
+            };
+        })();
     </script>
 
-    <button data-interaccion-accion="test-page" onclick="() => sendTag()">
-        TEST
+    <button onclick="_actualizarContexto()">
+        Actualizar contexto
     </button>
 </main>
 
