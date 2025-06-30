@@ -6,7 +6,15 @@
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-52S6XLMQ');</script>
+    })(window,document,'script','dataLayer','GTM-TG42TQB');</script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='customDataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','customDataLayer','GTM-52S6XLMQ');</script>
     <!-- End Google Tag Manager -->
 
     <meta charset="UTF-8">
@@ -14,6 +22,11 @@
     <title>Test Page</title>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TG42TQB"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-52S6XLMQ"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -25,94 +38,85 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         * Registra una interacción del usuario.
         *
         * @ejemplo
-        * __registrarInteraccion({ idUsuario: 2, seccion: "RRPP", accion: "ver material", detalle: "Módulo 12, clase 1, MAT, láminas" })
+        * __registrarInteraccion({ seccion: "RRPP", accion: "ver material", detalle: "Módulo 12, clase 1, MAT, láminas" })
         *
         * @param {object} interaccion: objeto que representa la interacción del usuario.
-        * @param {number} interaccion.idUsuario: ID del usuario.
         * @param {string} interaccion.seccion: sección actual.
         * @param {string} interaccion.accion: acción realizada por usuario.
         * @param {string | undefined} interaccion.detalle: (opcional) detalle de la acción realizada por usuario.
         */
         function _registrarInteraccion(interaccion) {
-            const interaccionEjemplo = {
-                "idUsuario": 1,
-                "seccion": "RRPP",
-                "accion": "ver material",
-                "detalle": "Lenguaje y Comunicación, módulo 20, clase 2, Proyectables",
-            };
+            try {
+                const interaccionEjemplo = {
+                    "seccion": "RRPP",
+                    "accion": "ver material",
+                    "detalle": "Lenguaje y Comunicación, módulo 20, clase 2, Proyectables",
+                };
 
-            if (typeof interaccion !== "object") {
-                console.error(`interacción provista inválida, se esperaba 'object', pero se recibió '${typeof interaccion}'`, {
-                    interaccionProvista: interaccion,
-                    interaccionEjemplo,
+                if (typeof interaccion !== "object") {
+                    console.error(`interacción provista inválida, se esperaba 'object', pero se recibió '${typeof interaccion}'`, {
+                        interaccionProvista: interaccion,
+                        interaccionEjemplo,
+                    });
+                    return;
+                }
+
+                const seccion = interaccion.seccion ?? "";
+                const accion = interaccion.accion ?? "";
+                const detalle = interaccion.detalle ?? "";
+
+                if (typeof seccion !== "string") {
+                    console.error("propiedad 'seccion' no es un string", {
+                        interaccionProvista: interaccion,
+                        interaccionEjemplo,
+                    });
+                    return;
+                }
+
+                if (seccion === "") {
+                    console.error("propiedad 'seccion' está vacía", {
+                        interaccionProvista: interaccion,
+                        interaccionEjemplo,
+                    });
+                    return;
+                }
+
+                if (typeof accion !== "string") {
+                    console.error("propiedad 'accion' no es un string", {
+                        interaccionProvista: interaccion,
+                        interaccionEjemplo,
+                    });
+                    return;
+                }
+
+                if (accion === "") {
+                    console.error("propiedad 'accion' está vacía", {
+                        interaccionProvista: interaccion,
+                        interaccionEjemplo,
+                    });
+                    return;
+                }
+
+                if (typeof detalle !== "string") {
+                    console.error("propiedad 'detalle' no es un string", {
+                        interaccionProvista: interaccion,
+                        interaccionEjemplo,
+                    });
+                    return;
+                }
+
+                const horaLocal = (new Date).toLocaleString();
+
+                window.customDataLayer.push({
+                    "event": "contexto-actualizado",
+                    "seccion": seccion,
+                    "accion": accion,
+                    "detalle": detalle,
+                    "horaLocal": horaLocal,
                 });
-                return;
+            } catch (error) {
+                console.error("error al registrar interacción", error);
             }
-
-            const idUsuario = Number(interaccion.idUsuario);
-
-            if (Number.isNaN(idUsuario) || !Number.isInteger(idUsuario)) {
-                console.error("propiedad 'idUsuario' no es un número entero", {
-                    interaccionProvista: interaccion,
-                    interaccionEjemplo,
-                });
-                return;
-            }
-
-            const seccion = interaccion.seccion ?? "";
-            const accion = interaccion.accion ?? "";
-            const detalle = interaccion.detalle ?? "";
-
-            if (typeof seccion !== "string") {
-                console.error("propiedad 'seccion' no es un string", {
-                    interaccionProvista: interaccion,
-                    interaccionEjemplo,
-                });
-                return;
-            }
-
-            if (seccion === "") {
-                console.error("propiedad 'seccion' está vacía", {
-                    interaccionProvista: interaccion,
-                    interaccionEjemplo,
-                });
-                return;
-            }
-
-            if (typeof accion !== "string") {
-                console.error("propiedad 'accion' no es un string", {
-                    interaccionProvista: interaccion,
-                    interaccionEjemplo,
-                });
-                return;
-            }
-
-            if (accion === "") {
-                console.error("propiedad 'accion' está vacía", {
-                    interaccionProvista: interaccion,
-                    interaccionEjemplo,
-                });
-                return;
-            }
-
-            if (typeof detalle !== "string") {
-                console.error("propiedad 'detalle' no es un string", {
-                    interaccionProvista: interaccion,
-                    interaccionEjemplo,
-                });
-                return;
-            }
-
-            const horaLocal = (new Date).toLocaleString();
-
-            window.dataLayer.push({
-                "event": "contexto-actualizado",
-                "idUsuario": idUsuario,
-                "seccion": seccion,
-                "accion": accion,
-                "detalle": detalle,
-                "horaLocal": horaLocal,
-            });
         }
     </script>
 
