@@ -21,47 +21,103 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <main>
     <script>
-        function _inicializarContexto() {
-            window._contexto = {};
-        }
+        /**
+        * Registra una interacción del usuario.
+        *
+        * @ejemplo
+        * __registrarInteraccion({ idUsuario: 2, seccion: "RRPP", accion: "ver material", detalle: "Módulo 12, clase 1, MAT, láminas" })
+        *
+        * @param {object} interaccion: objeto que representa la interacción del usuario.
+        * @param {number} interaccion.idUsuario: ID del usuario.
+        * @param {string} interaccion.seccion: sección actual.
+        * @param {string} interaccion.accion: acción realizada por usuario.
+        * @param {string | undefined} interaccion.detalle: (opcional) detalle de la acción realizada por usuario.
+        */
+        function _registrarInteraccion(interaccion) {
+            const interaccionEjemplo = {
+                "idUsuario": 1,
+                "seccion": "RRPP",
+                "accion": "ver material",
+                "detalle": "Lenguaje y Comunicación, módulo 20, clase 2, Proyectables",
+            };
 
-        function _actualizarContexto(interaccion = {}) {
             if (typeof interaccion !== "object") {
-                console.error("interacción no es un objeto", { interaccion });
+                console.error(`interacción provista inválida, se esperaba 'object', pero se recibió '${typeof interaccion}'`, {
+                    interaccionProvista: interaccion,
+                    interaccionEjemplo,
+                });
                 return;
             }
 
-            if (typeof _contexto !== "object") {
-                console.warn("contexto inválido, reinicializando");
-                _inicializarContexto();
+            const idUsuario = Number(interaccion.idUsuario);
+
+            if (Number.isNaN(idUsuario) || !Number.isInteger(idUsuario)) {
+                console.error("propiedad 'idUsuario' no es un número entero", {
+                    interaccionProvista: interaccion,
+                    interaccionEjemplo,
+                });
+                return;
             }
 
-            for (const key in interaccion) {
-                window._contexto[key] = interaccion[key];
+            const seccion = interaccion.seccion ?? "";
+            const accion = interaccion.accion ?? "";
+            const detalle = interaccion.detalle ?? "";
+
+            if (typeof seccion !== "string") {
+                console.error("propiedad 'seccion' no es un string", {
+                    interaccionProvista: interaccion,
+                    interaccionEjemplo,
+                });
+                return;
             }
 
-            window._contexto.horaLocal = (new Date).toISOString();
+            if (seccion === "") {
+                console.error("propiedad 'seccion' está vacía", {
+                    interaccionProvista: interaccion,
+                    interaccionEjemplo,
+                });
+                return;
+            }
+
+            if (typeof accion !== "string") {
+                console.error("propiedad 'accion' no es un string", {
+                    interaccionProvista: interaccion,
+                    interaccionEjemplo,
+                });
+                return;
+            }
+
+            if (accion === "") {
+                console.error("propiedad 'accion' está vacía", {
+                    interaccionProvista: interaccion,
+                    interaccionEjemplo,
+                });
+                return;
+            }
+
+            if (typeof detalle !== "string") {
+                console.error("propiedad 'detalle' no es un string", {
+                    interaccionProvista: interaccion,
+                    interaccionEjemplo,
+                });
+                return;
+            }
+
+            const horaLocal = (new Date).toLocaleString();
 
             window.dataLayer.push({
                 "event": "contexto-actualizado",
+                "idUsuario": idUsuario,
+                "seccion": seccion,
+                "accion": accion,
+                "detalle": detalle,
+                "horaLocal": horaLocal,
             });
         }
-
-        (function() {
-            _inicializarContexto();
-
-            window._contexto = {
-                version: 4,
-                idUsuario: 10,
-                asignatura: "Lenguaje y Comunicación",
-                nivel: "4° básico",
-                modulo: "Aprender a leer",
-            };
-        })();
     </script>
 
-    <button onclick="_actualizarContexto()">
-        Actualizar contexto
+    <button onclick="_registrarInteraccion()">
+        Registrar interacción
     </button>
 </main>
 
